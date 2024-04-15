@@ -30,12 +30,15 @@ public class EventService {
         return eventOptional.get();
     }
 
-    public List<Event> findEventByFilters(Integer endYear, String topic, String swot, String region, String sector, String pest, String source, String country, String city) {
+    public List<Event> findEventByFilters(Integer startYear, Integer endYear, String topic,
+                                          String swot, String region, String sector,
+                                          String pestle, String source, String country,
+                                          String city) {
         List<Event>eventList  = null;
-        if(endYear!=null || topic !=null || swot!=null || region!=null || sector!=null
-                || pest!=null || source !=null || country!=null || city !=null){
-            eventList = eventRepository.findByEndYearOrTopicOrSwotOrRegionOrSectorOrPestleOrSourceOrCountryOrCity(
-                    endYear, topic, swot, region, sector, pest, source, country, city);
+        if(startYear != null || endYear!=null || topic !=null || swot!=null || region!=null || sector!=null
+                || pestle!=null || source !=null || country!=null || city !=null){
+            eventList = eventRepository.findEvents( startYear,
+                    endYear, topic, swot, region, sector, pestle, source, country, city);
         }else{
             eventList = eventRepository.findAll();
         }

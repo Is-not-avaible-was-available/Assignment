@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/event")
+@CrossOrigin
 public class EventController {
     private final EventService eventService;
 
@@ -38,18 +39,19 @@ public class EventController {
 
     @GetMapping
     public ResponseEntity<List<Event>> getEventsBasedOnFilters(
+            @RequestParam(required = false) Integer startYear,
             @RequestParam(required = false) Integer endYear,
             @RequestParam(required = false) String topic,
             @RequestParam(required = false) String swot,
             @RequestParam (required = false)String region,
             @RequestParam (required = false) String sector,
-            @RequestParam (required = false) String pest,
+            @RequestParam (required = false) String pestle,
             @RequestParam (required = false) String source,
             @RequestParam (required = false) String country,
             @RequestParam (required = false) String city
     ){
-        List<Event> events = eventService.findEventByFilters(endYear,topic,swot,region,
-                sector, pest, source, country, city);
+        List<Event> events = eventService.findEventByFilters(startYear, endYear,topic,swot,region,
+                sector, pestle, source, country, city);
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 }
