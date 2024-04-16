@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import EventChart from "./EventChart";
 
-const ApiDataFetcher = ({maxEvents = 30, xAxisVariable}) => {
+const ApiDataFetcher = ({maxEvents , xAxisVariable}) => {
     const [eventsData, setEventsData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
