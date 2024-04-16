@@ -1,27 +1,30 @@
-
-import './App.css';
 import ApiDataFetcher from "./ApiDataFetcher";
+import EventChart from "./EventChart";
+import React, { useState } from 'react';
 
-function App() {
-    // const [data, setData] = useState([]);
-    //
-    // useEffect(() => {
-    //     fetchData();
-    // }, []);
-    //
-    // const fetchData = async () => {
-    //     try {
-    //         const response = await axios.get('http://localhost:8080/event');
-    //         setData(response.data);
-    //     } catch (error) {
-    //         console.error('Error fetching data:', error);
-    //     }
-    // };
-    return (
+
+const App = () =>{
+const [xAxisVariable, setXAxisVariable] = useState('startYear'); // Default to startYear
+
+const handleVariableChange = (event) => {
+    setXAxisVariable(event.target.value);
+};
+
+return (
+    <div>
+        <h1>Event Data Visualization</h1>
         <div>
-           <ApiDataFetcher/>
+            <label htmlFor="xAxisVariable">Select X-Axis Variable:</label>
+            <select id="xAxisVariable" value={xAxisVariable} onChange={handleVariableChange}>
+                <option value="startYear">Start Year</option>
+                <option value="city">City</option>
+                <option value="country">Country</option>
+                <option value="country">Region</option>
+            </select>
         </div>
-    );
-}
+        <ApiDataFetcher maxEvents={30} xAxisVariable={xAxisVariable}/>
+    </div>
+);
+};
 
 export default App;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Legend, Tooltip } from 'chart.js';
-import { Bar} from 'react-chartjs-2';
+import {Line} from 'react-chartjs-2';
 
 ChartJS.register(
     CategoryScale,
@@ -12,7 +12,7 @@ ChartJS.register(
     Tooltip
 );
 
-const EventChart = ({ eventsData }) => {
+const EventChart = ({ eventsData, xAxisVariable }) => {
     const [chartData, setChartData] = useState({
         labels: [],
         datasets: [],
@@ -20,8 +20,19 @@ const EventChart = ({ eventsData }) => {
 
     useEffect(() => {
         if (eventsData) {
-            const sortedEventsData = eventsData.sort((a,b) => a.startYear - b.startYear);
-            let chartLabels = sortedEventsData.map((event) => event.startYear);
+            const sortedEventsData = eventsData.sort((a,b) => {
+                const valueA = a[xAxisVariable];
+                const valueB = b[xAxisVariable];
+
+                // Check if the values are numeric
+                if (!isNaN(valueA) && !isNaN(valueB)) {
+                    return valueA - valueB; // Numerical comparison
+                } else {
+                    // Resort to lexical comparison
+                    return String(valueA).localeCompare(String(valueB));
+                }});
+
+            let chartLabels = sortedEventsData.map((event) => event[xAxisVariable]);
             const datasets = [];
 
             // Handle different data availability (intensity, impact, relevance, likelihood)
@@ -51,7 +62,7 @@ const EventChart = ({ eventsData }) => {
                 datasets: datasets,
             });
         }
-    }, [eventsData]);
+    }, [eventsData, xAxisVariable]);
 
     const chartOptions = {
         responsive: true,
@@ -60,10 +71,10 @@ const EventChart = ({ eventsData }) => {
                 {
                     scaleLabel: {
                         display:true,
-                        labelString: 'Start Year'
+                        labelString: xAxisVariable
                     },
                     ticks:{
-
+                        beginAtZero: true
                     }
                 },
             ]
@@ -74,8 +85,8 @@ const EventChart = ({ eventsData }) => {
         <div>
             {eventsData && (
                 <div>
-                    <h2>Event Chart Based on Start Year:</h2>
-                        <Bar options={chartOptions} data={chartData} />
+                    <h2>Event Chart Based on {xAxisVariable}:</h2>
+                        <Line options={chartOptions} data={chartData} />
                 </div>
             )}
         </div>
